@@ -6,48 +6,109 @@
     android:layout_height="match_parent"
     android:background="#87CEEB">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:theme="?android:attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@+id/ViewProfile"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
 
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="Back"
+            android:src="@drawable/left2"
+            app:layout_constraintBottom_toBottomOf="@+id/header"
+            app:layout_constraintEnd_toStartOf="@+id/headerText"
+            app:layout_constraintStart_toStartOf="@+id/header"
+            app:layout_constraintTop_toTopOf="@+id/header"
+            app:layout_constraintWidth_percent="0.1" />
+    <TextView
+        android:text="My Profile"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:id="@+id/headerText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/back"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintTop_toTopOf="@+id/header"
+        app:layout_constraintBottom_toBottomOf="@+id/header"
+        />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <ImageView
         android:id="@+id/ViewProfile"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="220dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/profileimage"
+        android:background="@drawable/rounded_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/header"
         />
+
     <TextView
-        android:layout_margin="10dp"
-        android:text="UserName"
-        android:textStyle="bold"
-        android:textAlignment="center"
         android:id="@+id/UserName"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/ViewProfile"
-        />
-    <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:layout_height="300dp"
-        android:layout_marginBottom="362dp"
+        android:background="@drawable/rounded_border"
+        android:backgroundTint="@color/white"
+        android:text="UserName"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ViewProfile" />
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:text="E-mail:"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@id/emailField"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/UserName" />
+    <TextView
+        android:layout_margin="10dp"
+        android:text="examenple@email.com"
+        android:id="@+id/emailField"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toEndOf="@+id/emailText"
+        app:layout_constraintTop_toBottomOf="@id/UserName"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
+    <TextView
+        android:id="@+id/bioText"
+        android:text="Bio Text: "
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailText"
+       />
+    <TextView
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        android:layout_margin="10dp"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="250dp"
+        app:layout_constraintStart_toEndOf="@+id/bioText"
+        app:layout_constraintTop_toBottomOf="@id/emailText"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
