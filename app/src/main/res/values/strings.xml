@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FinalAppPamn</string>
+    <string name="searchbar_hint">Search</string>
+    <string name="nested_scroll_view_content_description" />
+    <string name="content_description_media">Contenido de la imagen\n</string>
+    <string name="title_activity_login_page">LoginPage</string>
 </resources>
