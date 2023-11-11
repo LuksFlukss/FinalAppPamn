@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.FinalAppPamn" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.FinalAppPamn" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
@@ -28,6 +28,11 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+        <item name = "bottomNavigationStyle">@style/bottomNavigationStyle</item>
     </style>
 
+    <style name="bottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name ="itemIconTint">@color/md_theme_light_secondary</item>
+        <item name="itemTextColor">@color/md_theme_light_secondary</item>
+    </style>
 </resources>

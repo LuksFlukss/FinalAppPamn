@@ -1,24 +1,40 @@
 package com.example.finalapppamn
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.finalapppamn.model.CardViewProvider
-import com.example.finalapppamn.view.CardViewAdapter
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.homepage)
-        initRecyclerView()
+        setContentView(R.layout.activity_main)
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.menu_item_home -> {
+                    replaceFragment(HomePage())
+                    true
+                }
+                R.id.menu_item_profile -> {
+                    replaceFragment(ProfilePage())
+                    true
+                }
+                R.id.menu_item_settings -> {
+                    replaceFragment(HomePage())
+                    true
+                }
+                else -> false
+            }
+        }
+        replaceFragment(HomePage())
     }
 
-    fun initRecyclerView(){
-        val recyclerView = findViewById<RecyclerView>(R.id.recycleCard)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = CardViewAdapter(CardViewProvider.cardViewsList)
+    private fun replaceFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout,fragment).commit()
     }
-
 
 }
