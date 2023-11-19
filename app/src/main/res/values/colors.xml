@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources>7
+    <color name="LightGrev">#DCDCDC</color>
+    <color name="grey">#9E9E9E</color>
     <color name="seed">#007FFF</color>
     <color name="md_theme_light_primary">#005CBC</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
