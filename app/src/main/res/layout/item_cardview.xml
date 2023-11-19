@@ -35,15 +35,18 @@
         app:layout_constraintEnd_toEndOf="@id/cardLayout"
         app:layout_constraintStart_toEndOf="@+id/hometitle"
         app:layout_constraintTop_toBottomOf="@id/imageHome"
+        tools:ignore="VisualLintBounds"
         tools:text="Esto es una prueba" />
 
     <ImageView
         android:id="@+id/startIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Contenido imagen"
         android:src="@android:drawable/star_on"
         app:layout_constraintStart_toEndOf="@id/cardStart"
-        app:layout_constraintTop_toBottomOf="@id/imageHome">
+        app:layout_constraintTop_toBottomOf="@id/imageHome"
+        tools:ignore="VisualLintBounds">
 
     </ImageView>
 
