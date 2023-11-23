@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_item_settings -> {
-                    replaceFragment(HomePage())
+                    replaceFragment(MapsFragment())
                     true
                 }
 

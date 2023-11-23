@@ -75,8 +75,8 @@
                     android:maxLength="15"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp">
-
                 </com.google.android.material.textfield.TextInputEditText>
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -128,6 +128,20 @@
                 android:text="Register">
 
             </com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/md_theme_dark_error"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Login"
+                tools:ignore="HardcodedText,TouchTargetSizeCheck">
+
+            </com.google.android.material.button.MaterialButton>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
