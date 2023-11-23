@@ -28,11 +28,24 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
-        <item name = "bottomNavigationStyle">@style/bottomNavigationStyle</item>
+        <item name="bottomNavigationStyle">@style/bottomNavigationStyle</item>
     </style>
 
     <style name="bottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name ="itemIconTint">@color/md_theme_light_secondary</item>
+        <item name="itemIconTint">@color/md_theme_light_secondary</item>
         <item name="itemTextColor">@color/md_theme_light_secondary</item>
     </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Configuraciones específicas para TextInputLayout -->
+        <item name="boxStrokeColor">@color/md_theme_light_secondary</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="TextAppearance.App.TextInputLayout" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <!-- Configuraciones específicas para el texto del TextInputLayout -->
+        <item name="android:textColor">@color/md_theme_light_onPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
