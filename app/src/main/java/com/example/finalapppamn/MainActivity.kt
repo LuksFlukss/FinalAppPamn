@@ -1,6 +1,7 @@
 package com.example.finalapppamn
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_item_settings -> {
-                    replaceFragment(MapsFragment())
+                    startActivity(Intent(this, MapsActivity::class.java))
                     true
                 }
 
