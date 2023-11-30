@@ -17,4 +17,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="detailed_description_details">Lorem ipsum dolor sit amet, consectetur adipisici elit...</string>
+    <string name="price_value_details">420,96 €$</string>
+    <string name="star_rating_digits_details">1/5</string>
 </resources>
