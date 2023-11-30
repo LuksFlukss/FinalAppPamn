@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "621036402154",
+    "firebase_url": "https://pamw-project-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "pamw-project",
+    "storage_bucket": "pamw-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621036402154:android:22f7a2c8bb77f1e2d06e93",
+        "android_client_info": {
+          "package_name": "com.example.finalapppamn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJw1b4JRbXGvKaHA7j9cZqNhKJxE9G-Gs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
