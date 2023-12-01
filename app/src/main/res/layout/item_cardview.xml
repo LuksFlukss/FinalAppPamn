@@ -28,6 +28,14 @@
         app:layout_constraintTop_toBottomOf="@id/imageHome" />
 
     <TextView
+        android:id="@+id/price"
+        android:layout_width="112dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageHome" />
+
+    <TextView
         android:id="@+id/cardStart"
         android:layout_width="wrap_content"
         android:layout_height="90dp"

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "621036402154",
+    "firebase_url": "https://pamw-project-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "pamw-project",
     "storage_bucket": "pamw-project.appspot.com"
   },
