@@ -6,10 +6,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
+//import com.google.firebase.auth.FirebaseAuth
 
 class signUpActivity : AppCompatActivity() {
     //private val db = FirebaseFirestore.getInstance()
+    //private lateinit var auth: FirebaseAuth;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up)
@@ -43,7 +44,7 @@ class signUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             //Agregar usuario
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(useremail, userPassword)
+            /*FirebaseAuth.getInstance().createUserWithEmailAndPassword(useremail, userPassword)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // El usuario se registró exitosamente
@@ -55,7 +56,7 @@ class signUpActivity : AppCompatActivity() {
                         Toast.makeText(baseContext, "Error en el registro.",
                             Toast.LENGTH_SHORT).show()
                     }
-                }
+                }*/
 
         }
 
