@@ -4,12 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.finalapppamn.model.User
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.firestore.FirebaseFirestore
+
 //import com.google.firebase.auth.FirebaseAuth
 
 class signUpActivity : AppCompatActivity() {
-    //private val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private var userAdded = false
     //private lateinit var auth: FirebaseAuth;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +37,7 @@ class signUpActivity : AppCompatActivity() {
             val userPassword = password.text.toString().trim()
             val userconfirmPass = confirmPassword.text.toString().trim()
             val useraboutYou = aboutYouInputText.text.toString().trim()
-            val useremail= email.text.toString().trim()
+            val useremail= email.text.toString()
 
             if (username.isBlank() || userPassword.isBlank() || userconfirmPass.isBlank() || useraboutYou.isBlank() || useremail.isBlank() ) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT)
@@ -43,20 +49,42 @@ class signUpActivity : AppCompatActivity() {
                     .show()
                 return@setOnClickListener
             }
-            //Agregar usuario
-            /*FirebaseAuth.getInstance().createUserWithEmailAndPassword(useremail, userPassword)
-                .addOnCompleteListener(this) { task ->
+
+            FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(useremail, userPassword)
+                .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        // El usuario se registró exitosamente
+                        // User created successfully
                         val user = FirebaseAuth.getInstance().currentUser
-                        // Aquí puedes agregar el nuevo usuario a la base de datos de Firebase
-                        // utilizando Firebase Realtime Database o Firestore
+
+                        if (user != null) {
+                            // Add the user to the database
+                            val newUser = User(username,useremail,useraboutYou, favoritePublicationIds = mutableListOf()
+                            )
+                            db.collection("users").document(user.uid).set(newUser)
+                                .addOnCompleteListener { task2 ->
+                                    if (task2.isSuccessful) {
+                                        // User added to the database successfully
+                                        Toast.makeText(this, "Creado con existo", Toast.LENGTH_SHORT).show()
+                                        val intent = Intent(this, LoginActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    } else {
+                                        // Error adding user to the database
+                                        Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                }
+                        }
                     } else {
-                        // Si el registro falla, muestra un mensaje al usuario
-                        Toast.makeText(baseContext, "Error en el registro.",
-                            Toast.LENGTH_SHORT).show()
+                        // User creation failed
+                        if (task.exception is FirebaseAuthUserCollisionException) {
+                            Toast.makeText(this, "El correo ya está en uso", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Error al crearse", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }*/
+                }
 
         }
 
