@@ -20,4 +20,6 @@
     <string name="detailed_description_details">Lorem ipsum dolor sit amet, consectetur adipisici elit...</string>
     <string name="price_value_details">420,96 €$</string>
     <string name="star_rating_digits_details">1/5</string>
+    <string name="reviewer_name">Reviewer Name</string>
+    <string name="review_text">Review Text</string>
 </resources>

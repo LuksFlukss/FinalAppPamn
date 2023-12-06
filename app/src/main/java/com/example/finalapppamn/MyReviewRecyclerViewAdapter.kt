@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 
 import com.example.finalapppamn.placeholder.PlaceholderContent.PlaceholderItem
@@ -32,17 +33,17 @@ class MyReviewRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.contentView.contentDescription = item.content
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(binding: FragmentReviewBinding) : RecyclerView.ViewHolder(binding.root) {
         val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
+        val contentView: LinearLayout = binding.content
 
         override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+            return super.toString() + " '" + /*contentView.text + */"'"
         }
     }
 
