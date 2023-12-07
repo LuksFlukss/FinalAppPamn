@@ -37,11 +37,6 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.recycleCard -> {
-                    replaceFragment(DetailsFragment())
-                    true
-                }
-
                 else -> {
                     // Replace with HomePage fragment if no option is selected
                     replaceFragment(HomePage())
