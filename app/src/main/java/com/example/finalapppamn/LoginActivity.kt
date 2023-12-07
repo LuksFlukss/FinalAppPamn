@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                         // Go to the home screen
                         val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("EXTRA_USER", firebaseAuth.currentUser)
+                        intent.putExtra("EXTRA_USER", firebaseAuth.currentUser!!.uid)
                         startActivity(intent)
                         finish()
                     } else {
