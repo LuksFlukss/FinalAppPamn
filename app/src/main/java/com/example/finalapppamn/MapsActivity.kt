@@ -86,6 +86,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private fun placeMarkerOnMap(currentLatLong: LatLng) {
         val markerOptions = MarkerOptions().position(currentLatLong)
         markerOptions.title("My location")
+        markerOptions.draggable(true)
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
         mMap.addMarker(markerOptions)
     }
@@ -121,14 +122,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 }
 
                 // Update RecyclerView adapter with the retrieved data
-                UpdateView(cardList)
+                updateView(cardList)
             }
             .addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error getting documents.", exception)
             }
     }
 
-    private fun UpdateView(coords: List<CardViewCoor>) {
+    private fun updateView(coords: List<CardViewCoor>) {
         // Clear the existing data
         cardCoorProvider.cardViewsList.clear()
 
