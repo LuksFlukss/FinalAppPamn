@@ -1,23 +1,27 @@
 package com.example.finalapppamn
 
-import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.finalapppamn.LoginActivity.Companion.EXTRA_USER
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.firestore
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
     val db = Firebase.firestore
+    // Get the user from the intent
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
         replaceFragment(HomePage())
+
+        //Obtenemos el uid del usuario
+        val firebaseUser:String = intent.extras?.getString("EXTRA_USER").orEmpty()
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_item_settings -> {
-                    replaceFragment(MapsFragment())
+                    startActivity(Intent(this, MapsActivity::class.java))
                     true
                 }
 
@@ -50,5 +54,4 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
     }
-
 }

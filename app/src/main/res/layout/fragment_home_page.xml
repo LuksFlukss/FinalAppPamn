@@ -28,8 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
+            <EditText
+                android:id="@+id/search_bar_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/design_default_color_background"

@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
 
@@ -14,6 +15,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_login)
+
+        val firebaseAuth = FirebaseAuth.getInstance()
 
         // Obtenemos una referencia al TextInputEditText para el nombre de usuario
         val usernameEditText = findViewById<TextInputEditText>(R.id.emailUser)
@@ -43,15 +46,27 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            onLoginSuccess()
+            firebaseAuth.signInWithEmailAndPassword(username, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Sign in successful
+                        Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                        // Go to the home screen
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("EXTRA_USER", firebaseAuth.currentUser!!.uid)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        // Sign in failed
+                        Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
         }
 
     }
-
-    private fun onLoginSuccess() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+    companion object {
+        const val EXTRA_USER = "extra_user"
     }
 
 }
