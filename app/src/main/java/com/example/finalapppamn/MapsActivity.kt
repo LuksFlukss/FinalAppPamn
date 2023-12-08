@@ -3,12 +3,16 @@ package com.example.finalapppamn
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
-
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,7 +26,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.maps.android.PolyUtil
+
+import org.json.JSONObject
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -32,7 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var binding: ActivityMapsBinding
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient:FusedLocationProviderClient
-
+    private lateinit var currentLatLong: LatLng
     companion object{
         private const val LOCATION_REQUEST_CODE = 1
     }
@@ -41,13 +49,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Establece el oyente de eventos para los clics en marcadores
+
     }
 
 
@@ -60,13 +70,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
+
+
     private fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_REQUEST_CODE)
             return
         }
@@ -74,7 +86,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         fusedLocationClient.lastLocation.addOnSuccessListener(this){location ->
             if (location != null){
                 lastLocation  = location
-                val currentLatLong  = LatLng(location.latitude,location.longitude)
+                this.currentLatLong  = LatLng(location.latitude,location.longitude)
                 placeMarkerOnMap(currentLatLong)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,12f))
             }
@@ -91,7 +103,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mMap.addMarker(markerOptions)
     }
 
-    override fun onMarkerClick(p0: Marker): Boolean = false
+
+
+    override fun onMarkerClick(p0: Marker): Boolean {
+        val locationMark = p0.position
+        val path: MutableList<List<LatLng>> = ArrayList()
+        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=${this.currentLatLong.latitude},${this.currentLatLong.longitude}&destination=${locationMark.latitude},${locationMark.longitude}&key=AIzaSyD5eNNThNBVsPzZdekKfA06Ru6h1QL9RaE"
+        val directionsRequest = object : StringRequest(Method.GET, urlDirections, Response.Listener<String> {
+                response ->
+            val jsonResponse = JSONObject(response)
+            // Get routes
+            val routes = jsonResponse.getJSONArray("routes")
+            val legs = routes.getJSONObject(0).getJSONArray("legs")
+            val steps = legs.getJSONObject(0).getJSONArray("steps")
+            for (i in 0 until steps.length()) {
+                val points = steps.getJSONObject(i).getJSONObject("polyline").getString("points")
+                path.add(PolyUtil.decode(points))
+            }
+            for (i in 0 until path.size) {
+                this.mMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+            }
+        }, Response.ErrorListener {
+                _ ->
+        }){}
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(directionsRequest)
+
+        return true
+    }
 
 
     private fun fetchLocationsFromFirebase() {
