@@ -5,12 +5,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.finalapppamn.LoginActivity.Companion.EXTRA_USER
+import com.example.finalapppamn.model.User
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
 class MainActivity : AppCompatActivity() {
+
+    private var uid: String = ""
     private lateinit var bottomNavigationView: BottomNavigationView
     val db = Firebase.firestore
     // Get the user from the intent
@@ -18,10 +24,12 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        replaceFragment(HomePage())
+
 
         //Obtenemos el uid del usuario
-        val firebaseUser:String = intent.extras?.getString("EXTRA_USER").orEmpty()
+        this.uid = intent.extras?.getString("EXTRA_USER").orEmpty()
+        replaceFragment(HomePage())
+
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
@@ -32,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_item_profile -> {
+
                     replaceFragment(ProfilePage())
                     true
                 }
@@ -51,7 +60,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
     private fun replaceFragment(fragment: Fragment) {
+        val bundle = Bundle()
+        bundle.putString("uid",this.uid)
+        fragment.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
     }
+    fun getUserById(firebase: FirebaseFirestore, id: String): Task<DocumentSnapshot> {
+        // Obtenemos la colección "users".
+        val usersRef = firebase.collection("users")
+
+        // Obtenemos el documento del usuario con el ID especificado.
+        val userDoc = usersRef.document(id)
+
+        // Devolvemos el usuario.
+        return userDoc.get()
+    }
+
 }
