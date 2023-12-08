@@ -12,6 +12,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBindings
 import com.example.finalapppamn.model.CardView
 import com.example.finalapppamn.model.CardViewProvider
 import com.example.finalapppamn.view.CardViewAdapter
@@ -24,7 +25,24 @@ class HomePage : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recyclerView.setOnContextClickListener(searchEditText)
+        val searchEditText = ViewBindings.findChildViewById<EditText>(recyclerView,R.id.search_bar_text)
+
+        // Check for nullability before adding the TextWatcher
+        searchEditText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
+                // Not needed for this case, but this method is triggered before text changes.
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
+                // This method is triggered when text changes.
+                val searchText = charSequence.toString()
+                getCardsByTitle(searchText)
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                // Not needed for this case, but this method is triggered after text changes.
+            }
+        })
     }
 
     override fun onCreateView(
@@ -85,25 +103,6 @@ class HomePage : Fragment() {
         // Notify the adapter that the data has changed
         recyclerView.adapter?.notifyDataSetChanged()
     }
-
-    private val searchEditText = getView().findViewById<EditText>(R.id.search_bar_text)
-    searchEditText.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
-            // Not needed for this case, but this method is triggered before text changes.
-        }
-
-        override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
-            // This method is triggered when text changes.
-            val searchText = charSequence.toString()
-            // Perform actions with searchText (e.g., filter data, update UI, etc.).
-            // Call your method or function here using searchText.
-            getCardsByTitle(searchText)
-        }
-
-        override fun afterTextChanged(editable: Editable?) {
-            // Not needed for this case, but this method is triggered after text changes.
-        }
-    })
 
     private fun getCardsByTitle(searchText: String) {
         db.collection("Cardview").whereEqualTo("title", searchText)
