@@ -5,31 +5,31 @@ import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.example.finalapppamn.databinding.ActivityMapsBinding
 import com.example.finalapppamn.model.CardViewCoor
 import com.example.finalapppamn.model.cardCoorProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
-
 import org.json.JSONObject
 
 
@@ -41,6 +41,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient:FusedLocationProviderClient
     private lateinit var currentLatLong: LatLng
+    private var polylines: MutableList<Polyline> = mutableListOf()
+
     companion object{
         private const val LOCATION_REQUEST_CODE = 1
     }
@@ -65,6 +67,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
+        val mapStyleOptions = MapStyleOptions.loadRawResourceStyle(this, R.raw.custom_style)
+        mMap.setMapStyle(mapStyleOptions)
         setUpMap()
         fetchLocationsFromFirebase()
 
@@ -73,6 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
 
     private fun setUpMap() {
+
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -104,8 +109,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
 
+    private fun removePath(){
+        for (line in this.polylines) {
+            line.remove()
+        }
 
+        polylines.clear()
+    }
     override fun onMarkerClick(p0: Marker): Boolean {
+        removePath()
         val locationMark = p0.position
         val path: MutableList<List<LatLng>> = ArrayList()
         val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=${this.currentLatLong.latitude},${this.currentLatLong.longitude}&destination=${locationMark.latitude},${locationMark.longitude}&key=AIzaSyD5eNNThNBVsPzZdekKfA06Ru6h1QL9RaE"
@@ -121,13 +133,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 path.add(PolyUtil.decode(points))
             }
             for (i in 0 until path.size) {
-                this.mMap!!.addPolyline(PolylineOptions().addAll(path[i]).color(Color.RED))
+                val polylineOptions = PolylineOptions().addAll(path[i]).color(Color.RED)
+                val polyline = mMap.addPolyline(polylineOptions)
+                this.polylines.add(polyline)
             }
         }, Response.ErrorListener {
                 _ ->
         }){}
         val requestQueue = Volley.newRequestQueue(this)
         requestQueue.add(directionsRequest)
+
 
         return true
     }

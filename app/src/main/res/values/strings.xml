@@ -1,4 +1,5 @@
 <resources>
+    <string name="map_id">7f604b05e3b4df2e</string>
     <string name="app_name">FinalAppPamn</string>
     <string name="searchbar_hint">Search</string>
     <string name="nested_scroll_view_content_description" />
