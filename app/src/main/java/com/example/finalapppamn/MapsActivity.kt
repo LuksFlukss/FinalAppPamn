@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.android.volley.Response
@@ -118,9 +120,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
     override fun onMarkerClick(p0: Marker): Boolean {
         removePath()
+        showMarkerNameDialog(p0.title)
+
         val locationMark = p0.position
         val path: MutableList<List<LatLng>> = ArrayList()
-        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=${this.currentLatLong.latitude},${this.currentLatLong.longitude}&destination=${locationMark.latitude},${locationMark.longitude}&key=AIzaSyD5eNNThNBVsPzZdekKfA06Ru6h1QL9RaE"
+        val urlDirections = "https://maps.googleapis.com/maps/api/directions/json?origin=${this.currentLatLong.latitude},${this.currentLatLong.longitude}&destination=${locationMark.latitude},${locationMark.longitude}&key=${BuildConfig.MAPS_API_KEY}"
         val directionsRequest = object : StringRequest(Method.GET, urlDirections, Response.Listener<String> {
                 response ->
             val jsonResponse = JSONObject(response)
@@ -145,6 +149,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
 
         return true
+    }
+
+    private fun showMarkerNameDialog(markerTitle: String?) {
+        Toast.makeText(this, markerTitle, Toast.LENGTH_SHORT).show()
+
+
     }
 
 
