@@ -75,7 +75,7 @@
 
     <TextView
         android:id="@+id/bioText"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="250dp"
         android:layout_margin="10dp"
         android:text="Bio Text: "
@@ -83,6 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailText" />
 
     <TextView
+        android:id="@+id/bioContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="10dp"
@@ -92,7 +93,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/bioText"
         app:layout_constraintTop_toBottomOf="@id/emailField"
-        app:layout_constraintVertical_bias="0.0" />
+         />
 
     <Button
         android:id="@+id/modifyButton"

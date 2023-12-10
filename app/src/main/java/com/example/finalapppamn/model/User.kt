@@ -1,7 +1,19 @@
 package com.example.finalapppamn.model
 
-class User(
-    val name: String,
-    val password: String,
-    val email: String
-)
+data class User(
+    var name: String? = "",
+    var email: String? = "",
+    var aboutYou: String? = "",
+    var favoritePublicationIds: MutableList<String> = mutableListOf()
+) {
+
+    // Métodos para agregar y eliminar publicaciones favoritas
+
+    fun addFavoritePublicationId(publicationId: String): Boolean {
+        return favoritePublicationIds.add(publicationId)
+    }
+
+    fun removeFavoritePublicationId(publicationId: String): Boolean {
+        return favoritePublicationIds.remove(publicationId)
+    }
+}
