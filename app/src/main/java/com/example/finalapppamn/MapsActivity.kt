@@ -76,7 +76,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         if (result != null) {
                             // Manejar el resultado (LatLng)
                             // Por ejemplo, puedes centrar el mapa en la ubicación obtenida
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15f))
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 11f))
+                        }else{
+                            showMarkerNameDialog("No se encontró el lugar")
                         }
                     }
                 }

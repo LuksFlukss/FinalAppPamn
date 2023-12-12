@@ -4,6 +4,8 @@ import android.widget.RemoteViews.RemoteResponse
 import com.example.finalapppamn.BuildConfig
 import com.example.finalapppamn.model.data.ServiceModel.Geometry
 import com.example.finalapppamn.model.data.ServiceModel.Location
+import com.example.finalapppamn.model.data.ServiceModel.LocationResponse
+import com.example.finalapppamn.model.data.ServiceModel.Result
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,7 +17,7 @@ interface RetrofitService {
     suspend fun locationSearch(
         @Query("address") location: String,
         @Query("key") apiKey: String
-    ): Response<Location>
+    ): Response<LocationResponse>
 
 }
 
