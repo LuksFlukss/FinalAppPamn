@@ -4,16 +4,18 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Color
+import androidx.appcompat.widget.SearchView
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.ActivityCompat
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.finalapppamn.controller.MapsController
 import com.example.finalapppamn.databinding.ActivityMapsBinding
 import com.example.finalapppamn.model.CardViewCoor
 import com.example.finalapppamn.model.cardCoorProvider
@@ -32,11 +34,14 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-
+    private lateinit var mapsController: MapsController
     private val db = FirebaseFirestore.getInstance()
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -44,7 +49,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var fusedLocationClient:FusedLocationProviderClient
     private lateinit var currentLatLong: LatLng
     private var polylines: MutableList<Polyline> = mutableListOf()
-
     companion object{
         private const val LOCATION_REQUEST_CODE = 1
     }
@@ -58,11 +62,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        mapsController = MapsController(this)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val searchView = findViewById<SearchView>(R.id.searchView)
 
-        // Establece el oyente de eventos para los clics en marcadores
+        searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if(query != ""){
+                    val text = searchView.query.toString()
 
+                    mapsController.searchLocationByAddress(text) { result ->
+                        if (result != null) {
+                            // Manejar el resultado (LatLng)
+                            // Por ejemplo, puedes centrar el mapa en la ubicación obtenida
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 15f))
+                        }
+                    }
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Handle the search query text change
+                // Puedes agregar aquí la lógica para actualizar los resultados de búsqueda en tiempo real.
+                return false
+            }
+        })
     }
+
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -101,6 +129,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
 
     }
+
+
 
     private fun placeMarkerOnMap(currentLatLong: LatLng) {
         val markerOptions = MarkerOptions().position(currentLatLong)
@@ -202,4 +232,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
-    }
+
+
+}
