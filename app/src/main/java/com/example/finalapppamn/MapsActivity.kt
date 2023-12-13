@@ -34,13 +34,11 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+    private lateinit var lastMarker: Marker
     private lateinit var mapsController: MapsController
     private val db = FirebaseFirestore.getInstance()
     private lateinit var mMap: GoogleMap
@@ -63,8 +61,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mapFragment.getMapAsync(this)
 
         mapsController = MapsController(this)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         val searchView = findViewById<SearchView>(R.id.searchView)
 
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
@@ -72,11 +70,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 if(query != ""){
                     val text = searchView.query.toString()
 
-                    mapsController.searchLocationByAddress(text) { result ->
+                    mapsController.searchLocationByAddress(text) { result,nameResult ->
                         if (result != null) {
                             // Manejar el resultado (LatLng)
                             // Por ejemplo, puedes centrar el mapa en la ubicación obtenida
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 11f))
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 12f))
+                            placeMarkerOnMap(result, nameResult.toString(),true)
                         }else{
                             showMarkerNameDialog("No se encontró el lugar")
                         }
@@ -109,7 +108,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
 
     private fun setUpMap() {
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -124,22 +122,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             if (location != null){
                 lastLocation  = location
                 this.currentLatLong  = LatLng(location.latitude,location.longitude)
-                placeMarkerOnMap(currentLatLong)
+                placeMarkerOnMap(currentLatLong,"My location", false)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong,12f))
             }
-
         }
-
     }
 
+    fun clearLastMarker() {
+        if (::lastMarker.isInitialized) {
+            lastMarker.remove()
+            removePath()
+        }
+    }
 
-
-    private fun placeMarkerOnMap(currentLatLong: LatLng) {
+    private fun placeMarkerOnMap(currentLatLong: LatLng, title: String,searchboolean: Boolean) {
         val markerOptions = MarkerOptions().position(currentLatLong)
-        markerOptions.title("My location")
-        markerOptions.draggable(true)
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        mMap.addMarker(markerOptions)
+        markerOptions.title(title)
+        if(searchboolean){
+            clearLastMarker()
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+            lastMarker = mMap.addMarker(markerOptions)!!
+            showMarkerNameDialog(title)
+        }else{
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            mMap.addMarker(markerOptions)
+        }
     }
 
 
@@ -233,7 +240,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         cardCoorProvider.cardViewsList.addAll(coords)
 
     }
-
-
 
 }

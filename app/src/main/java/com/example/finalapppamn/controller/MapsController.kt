@@ -1,5 +1,6 @@
 package com.example.finalapppamn.controller
 
+import android.widget.Toast
 import com.example.finalapppamn.BuildConfig
 import com.example.finalapppamn.MapsActivity
 import com.example.finalapppamn.model.data.RetrofitServiceFactory
@@ -13,13 +14,9 @@ import com.example.finalapppamn.model.data.ServiceModel.AddressComponent
 
 
 class MapsController(mapsActivity: MapsActivity) {
-    private lateinit var googleMap: GoogleMap
+    private lateinit var mapsActivity: MapsActivity
 
-    fun setGoogleMap(googleMap: GoogleMap) {
-        this.googleMap = googleMap
-        // Configuración adicional del mapa si es necesario
-    }
-    fun searchLocationByAddress(sAddress: String, callback: (LatLng?) -> Unit) {
+    fun searchLocationByAddress(sAddress: String, callback: (LatLng?,String?) -> Unit) {
         // Create a coroutine scope using the main dispatcher
         val scope = CoroutineScope(Dispatchers.Main)
         val service = RetrofitServiceFactory.makeRetrofitService()
@@ -39,21 +36,26 @@ class MapsController(mapsActivity: MapsActivity) {
                     if (location != null) {
                         // Process the location (latitude and longitude)
                         val latLng = LatLng(location.lat, location.lng)
-                        callback(latLng)
+                        val searchName = responseBody.results[0].formatted_address
+                        callback(latLng,searchName)
                     } else {
                         // Handle the case where location is null
 
-                        callback(null)
+                        callback(null,null)
                     }
                 } else {
                     // Handle the case where there are no results
-                    callback(null)
+                    callback(null,null)
                 }
             } catch (e: Exception) {
                 // Handle exceptions
                 e.printStackTrace()
-                callback(null)
+                callback(null,null)
             }
         }
     }
+    private fun showMarkerNameDialog(markerTitle: String?) {
+        Toast.makeText(this.mapsActivity, markerTitle, Toast.LENGTH_SHORT).show()
+    }
+
 }

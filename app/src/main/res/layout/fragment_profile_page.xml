@@ -13,10 +13,9 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/materialToolBar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            style="@style/Widget.MaterialComponents.Light.ActionBar.Solid"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@android:drawable/arrow_down_float"
             app:title="My Profile"
             app:titleCentered="true">
 
