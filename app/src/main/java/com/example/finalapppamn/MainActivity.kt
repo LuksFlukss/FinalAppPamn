@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         //Obtenemos el uid del usuario
         this.uid = intent.extras?.getString("EXTRA_USER").orEmpty()
         replaceFragment(HomePage())

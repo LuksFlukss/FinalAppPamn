@@ -32,10 +32,10 @@ class ProfilePage : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile_page, container, false)
 
-        val toolbar: MaterialToolbar = view.findViewById(R.id.materialToolBar)
         val userName = view.findViewById<TextView>(R.id.UserName)
         val emailField = view.findViewById<TextView>(R.id.emailField)
         val bioText = view.findViewById<TextView>(R.id.bioContent)
+
         db.collection("users").document(uid).get().addOnSuccessListener {document ->
             if (document.exists()){
                 userName.text = document.getString("name")
@@ -44,7 +44,7 @@ class ProfilePage : Fragment() {
             }
 
         }
-
+        
         return view
     }
 
